@@ -1,0 +1,13 @@
+.container {
+    display: flex;
+}
+
+.createMeetings {
+    flex: 50%;
+
+}
+
+.displayMeetings {
+    flex: 50%;
+
+}
