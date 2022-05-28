@@ -7,24 +7,27 @@ import TextField from "@mui/material/TextField";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import "../App.css";
-
 // This component contains everything relevant for the meetings
 // Each meeting has a title, time, text description
 // These 3 things will be the state of the component
 function Meetings() {
   // title is a text field with a default value of ""
   const [title, setTitle] = useState("");
-
+  const [titleArr, setTitleArr] = useState([]);
   // create a new date object
   let today = new Date();
   const [date, setDate] = useState(
     // ensuring that the date format matches the one specified by Django
     today.toISOString().split("T")[0]
   );
-  const [description, setDescription] = useState("");
+  const [dateArr, setDateArr] = useState([]);
 
+  // description
+  const [description, setDescription] = useState("");
+  const [descArr, setDescArr] = useState([]);
   // estimated time
   const [timeEst, setTimeEst] = useState(0);
+  const [timeArr, setTimeArr] = useState([]);
 
   const handleChangeTitle = (event) => {
     setTitle(event.target.value);
@@ -48,6 +51,13 @@ function Meetings() {
   const Submit = (e) => {
     e.preventDefault();
     console.log([title, date, timeEst, description]);
+
+    // Add it to the array
+    setTitleArr(titleArr.concat(title));
+    setDateArr(dateArr.concat(date));
+    setDescArr(descArr.concat(description));
+    setTimeArr(timeArr.concat(timeEst));
+    setTitleArr.concat(title);
     fetch("http://localhost:8000/meetings/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -72,8 +82,32 @@ function Meetings() {
       <h1>Investor Meetings</h1>
       <div className="container">
         <div className="displayMeetings">
-          <h3>Upcoming meetings</h3>
-          <Button onClick={Submit}>Submit</Button>
+          <h2>Upcoming meetings</h2>
+          <div className="renderMeetings">
+            {/* <ul>
+              {titleArr.map((newTitle) => (
+                <h3 key={newTitle.uniqueId}>{newTitle}</h3>
+              ))}
+              {dateArr.map((newDate) => (
+                <li key={newDate.uniqueId}>Date: {newDate}</li>
+              ))}
+            </ul> */}
+            <ul>
+              {titleArr.map((newTitle) => (
+                <div
+                  style={{ border: "2px solid green", margin: "10px" }}
+                  key={newTitle.uniqueId}
+                >
+                  <h1 key={newTitle.uniqueId}>{newTitle}</h1>
+                  {dateArr.map((newDate) => (
+                    <p key={newDate.uniqueId} id={newDate.uniqueId}>
+                      Date: {newDate}
+                    </p>
+                  ))}
+                </div>
+              ))}
+            </ul>
+          </div>
         </div>
         <h3>Add meetings</h3>
         <div className="createMeetings">
